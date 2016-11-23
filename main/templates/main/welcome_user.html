@@ -1,0 +1,308 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="" en>
+
+<head>
+    <meta charset="utf-8">
+    <title>listen</title>
+    <!-- <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'sitewide/bootstrap-social-gh-pages/bootstrap-social.css' %}">
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{% static 'main/style_home_page.css' %}">
+    <link rel="stylesheet" href="{% static 'main/style_mobile.css' %}">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Archivo+Narrow:400,700' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Dawning+of+a+New+Day' rel='stylesheet' type='text/css'>
+    <link href="https://fonts.googleapis.com/css?family=Josefin+Sans" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Oswald:400,700' rel='stylesheet' type='text/css'>
+    <link href="https://fonts.googleapis.com/css?family=Mirza|Poiret+One" rel="stylesheet">
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/1.0.52/wavesurfer.min.js"></script>
+</head>
+
+<body style="background-color:#ccc;">
+    <style>
+    .dropdown-item {
+        display: block;
+    }
+    #user_feed{
+        font-family: 'Josefin Sans';
+    }
+    .feed_element{
+        padding-bottom: 2vw;
+        border-bottom: 1px solid azure;
+    }
+    .feed_element_user_photo{
+        width: 6%;
+        border-radius: 40px;
+    }
+    .feed_element_user_details{
+        display: block;
+        text-align: left;
+    }
+    #user_feed > .feed_element ~ .feed_element {
+        padding-top: 2vw;
+    }
+    @-moz-keyframes blink {
+        0% {
+            opacity: 1.0;
+        }
+        40% {
+            opacity: 0.0;
+        }
+        100% {
+            opacity: 1.0;
+        }
+    }
+    
+    @-webkit-keyframes blink {
+        0% {
+            opacity: 1.0;
+        }
+        40% {
+            opacity: 0.0;
+        }
+        100% {
+            opacity: 1.0;
+        }
+    }
+    
+    @keyframes blink {
+        0% {
+            opacity: 1.0;
+        }
+        40% {
+            opacity: 0.0;
+        }
+        100% {
+            opacity: 1.0;
+        }
+    }
+    
+    .header_hover:hover {
+        color: #ccc !important;
+    }
+    </style>
+    <nav class="navbar navbar-default" style="background-color: currentColor; border:0px;height:3vw;z-index:2;position:fixed;width: 100vw;">
+        <div class="container-fluid">
+            <ul class="nav navbar-nav">
+                <li><img src="{% static 'sitewide/logo_white.png' %}" style="width: 37%;
+    position: relative;
+    left: 11vw;"></li>
+                <li>
+                    <input type="text" class="form-control form_element_design" id="search_header" placeholder="Search Audios" style="width: 28vw;
+    position: relative;
+    top: 0.8vw;
+    left: -2vw;">
+                </li>
+                <li>
+                    <a class="header_hover" href='../profile/{{profile_link}}'>
+                        <img src={{photo_link}} style="    width: 137%;
+    top: 12%;
+    left: 120%;
+    position: absolute;"></a>
+                </li>
+                <li>
+                    <a class="header_hover" href='../profile/{{profile_link}}'>
+                        <p class="header_hover" style="    left: 3vw;
+    position: relative;">{{ user.first_name }}</p>
+                    </a>
+                </li>
+                <li><a class="header_hover" href="/main/logout_user/" style="position:relative;left:2vw;">Log out
+</a></li>
+            </ul>
+        </div>
+    </nav>
+    <!-- <div id="recorder" style="text-align:center;">
+        <i class="fa fa-microphone" aria-hidden="true" id="recorder_button" style="color:indianred;font-size: 5vw;"></i>
+        <div id="recorder_drop" style="left: 23%;
+    z-index: -1;
+    width: 53vw;
+    background-color: white;
+    height: 11vw;
+    position: fixed;
+    top: 0vw;
+    border-bottom-left-radius: 50%;
+    border-bottom-right-radius: 50%;"></div>
+    <p>00:00:00</p>
+    <p id="recorder_msg" style="width: 14vw;
+    top: -4vw;
+    left: 54vw;
+    position: relative;
+">Click on mic to record yourself</p>
+
+    </div> -->
+    <div style="font-family:'Josefin Sans';font-size:129%" class="modal fade modal_confirm_audio_upload" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">Preview your Audio</h4>
+                </div>
+                <div class="modal-body" id="confirm_audio_upload_body">
+                    <div class="row">
+                        <span class="col-md-4">Listen here:</span>
+                        <span class="col-md-4" id="play_audio_confirm_modal"></span>
+                    </div>
+                    <br>
+                    <p style="text-align:center;">Add few more details about your audio</p>
+                    <br>
+                    <div class="row">
+                        <span class="col-md-6"><p>a title to your audio? </p></span>
+                        <span class="col-md-6"><input class="form-control" id="audio_post_title" type="text" name="audio_post_title" placeholder="Title"></span>
+                    </div>
+                    <div class="row">
+                        <span class="col-md-6">You can also describe your audio here or add tags below: </span>
+                        <span class="col-md-6"><textarea style="height:6vw;" class="form-control" id="audio_post_desc" name="audio_post_desc" placeholder="Description" type="text"></textarea></span>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <span class="col-md-6">Choose or create new tags: </span>
+                        <span class="col-md-6"><textarea class="form-control" id="audio_post_desc" name="audio_post_tags" placeholder="Tags" type="text"></textarea></span>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <span class="col-md-8">Who can listen this?</span>
+                        <div class="col-md-4 btn-group">
+                            <button type="button" class="form-control btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                Sharing &nbsp<span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a>Public</a></li>
+                                <li><a>Circle</a></li>
+                                <li><a>Custom</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Dismiss</button>
+                    <button type="button" class="btn btn-primary" id="post_audio">Post</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="recorder_drop" style="left: 23%;
+    z-index: 1;
+    width: 53vw;
+    background-color: white;
+    height: 11vw;
+    position: fixed;
+    top: 0vw;
+    border-bottom-left-radius: 50%;
+    border-bottom-right-radius: 50%;
+    overflow:hidden;">
+        <div id="recorder_widgets" style="margin: 0 auto;
+    display: table;">
+            <p id="timer" style="position: absolute;
+    top: 6vw;
+    display: none;
+    /* right: 10vw; */
+    left: 11vw;
+    font-family: 'Josefin Sans';
+    font-size: 203%;">00:00:00</p>
+            <i class="fa fa-microphone" aria-hidden="true" id="recorder_button" style="color: indianred;
+    font-size: 5vw;
+    position: absolute;
+    top: 5vw;
+    left: 25vw;
+    cursor: pointer;
+    cursor: hand;"></i>
+            <p id='recorder_msg' style="display: inline;
+    font-family: 'Josefin Sans';
+    font-size: 129%;
+    left: 14vw;
+    position: relative;
+    top: 6vw;">Click on mic to record.</p>
+        </div>
+    </div>
+    <div id="home_screen_content" class="row" style="width: 100%;">
+        <div class="col-lg-3"></div>
+    <!-- FEED STARTS HERE -->
+        <div id="user_feed" class="col-lg-6" style="    text-align: center;
+    position: relative;
+    top: 12vw;"><p style="font-size: 2vw;">{{user.first_name}}'s Audios</p></div>
+    <!-- FEED ENDS HERE -->
+        <div class="col-lg-3"></div>
+    </div>
+    <script src="{% static 'main/recorder.js' %}"></script>
+    <script src="{% static 'main/recorder_321.js' %}"></script>
+    <script>
+    var shared_view, recorder_clicks = 0,
+        token = '{{ csrf_token }}';
+    $('.dropdown-menu a').on('click', function() {
+        $('.dropdown-toggle').html($(this).html() + '&nbsp <span class="caret"></span>');
+        shared_view = $(this).html();
+    })
+    $(document).ready(function() {
+        $.ajax({
+            url: '../create_feed/',
+            type: 'POST',
+            data: {'csrfmiddlewaretoken' : token},
+            success: function(data) {
+                var oo = data;
+                for (feed_element in data) {
+                    var post = '<div class="feed_element"><span class="feed_element_user_details"><img class="feed_element_user_photo" src = ' + data[feed_element]['photo_link'] + '><span class="feed_element_user_name"> '+ data[feed_element]['full_name'] + ' added this:</span></span><span class="element_title" style="display:block; text-align:left; font-size: xx-large;"> ' + data[feed_element]['title'] + ' </span> </span><audio controls style="width:34vw" src =/' + data[feed_element]['audio_link'] + ' > </audio><span class="element_description" style="display: block;text-align: left; font-size: large;"> ' + data[feed_element]['description'] + '</div>';
+                    feed = document.getElementById('user_feed');
+                    feed.insertAdjacentHTML('beforeend',post);
+
+                }
+            }
+        })
+    });
+    $(document).on('click', '#post_audio', function() {
+        console.log(shared_view);
+        var fd = new FormData();
+        fd.append('audio_post_title', $('#audio_post_title').val());
+        fd.append('audio_post_desc', $('#audio_post_desc').val());
+        fd.append('audio_post_view', shared_view);
+        fd.append('csrfmiddlewaretoken', token);
+        $.ajax({
+            url: '../update/',
+            type: 'POST',
+            data: fd,
+            processData: false,
+            contentType: false,
+            success: function(data) {
+                console.log('test_binary ' + JSON.stringify(data));
+                $('.modal_confirm_audio_upload').modal('hide');
+                recorder_clicks = 0;
+                document.getElementById('recorder_msg').textContent = "Click on mic to record.";
+                $('#recorder_msg').css('display', 'inline');
+                $('#timer').css('display', 'none');
+            }
+        });
+    });
+
+
+    $(document).on('click', '#recorder_button', function() {
+        recorder_clicks += 1;
+        if (recorder_clicks == 1) {
+            get_permissions();
+            document.getElementById('recorder_msg').textContent = "Next click starts recording you.";
+        } else if (recorder_clicks == 2) {
+            $('#timer').css('display', 'inline');
+            $('#recorder_msg').css('display', 'none');
+            startRecording();
+            $('#recorder_button').css('animation', 'blink 2s infinite');
+            $('#recorder_button').css('-webkit-animation', 'blink 2s infinite');
+            $('#recorder_button').css('-moz-animation', 'blink 2s infinite');
+        } else if (recorder_clicks == 3) {
+            $('#recorder_button').css('animation', '');
+            $('#recorder_button').css('-wekit-animation', '');
+            $('#recorder_button').css('-moz-animation', '');
+            stopRecording();
+            $('.modal_confirm_audio_upload').modal('show');
+
+        }
+    });
+    </script>
+</body>
+
+</html>

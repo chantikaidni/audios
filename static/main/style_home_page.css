@@ -1,0 +1,179 @@
+li{
+    list-style: none;
+}
+.conatiner {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    left: 0px;
+    top: 0px;
+    z-index: -1000;
+    overflow: hidden;
+}
+
+#main_title {
+    font-family: 'Poiret One', cursive;
+    position: relative;
+    font-size: 8vw;
+    z-index: 2;
+    color: white;
+    top: 8%;
+}
+
+#full_page {
+    background-image: url(home_page_bckg.jpg);
+    background-size: cover;
+    height: 100vh;
+}
+
+.form-inline {
+    position: relative;
+}
+
+.symbol {
+    font-size: 29%;
+    vertical-align: super;
+    margin-left: -2vw;
+}
+
+#login {
+    z-index: 3;
+}
+
+form:focus,
+input:focus {
+    outline: 0;
+}
+
+#tag_line {
+    display: block;
+    font-size: 1.6vw;
+    position: relative;
+    margin-top: -2vw;
+    margin-left: 11vw;
+    font-weight: bolder;
+}
+.onboarding{
+    width: 42%;
+    margin-top: 10%;
+}
+.social_text{
+    font-size:106%;
+}
+.form_element_design{
+    background-color: rgba(211, 218, 210, 0.81);
+    border: 1px solid #939393;
+}
+.signin_emailup{
+    margin-top:2vw;
+    background-color:rgba(211, 218, 210, 0.46);
+    border: 1px solid #939393;
+}
+.signin_emailup:hover{
+    background-color:#ccc; 
+}
+
+a{
+    text-decoration: none;
+}
+#email_up{
+    display: none;
+}
+#profile_name{
+    font-size: 2vw;
+    display: table;
+    margin: 0 auto;
+    text-align: center;
+    -webkit-user-select: none; /* Chrome/Safari */        
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+ */
+    -o-user-select: none;
+    user-select: none;
+}
+#profile_photo{
+    border-radius: 21vw;
+    margin: auto;
+    display: table;
+    width: 13vw;
+    -webkit-user-select: none;         
+    -moz-user-select: none; 
+    -ms-user-select: none; 
+    -o-user-select: none;
+    user-select: none;
+}
+#edit_Ppicture{
+    display: none;
+    position: absolute;
+    top: 15vw;
+    color: white;
+    margin: auto;
+    left: 47.5%;
+    background-color: #333;
+}
+#profile_contact_buttons{
+    display: table;
+    margin: auto;
+}
+#profile_contact_buttons li{
+    display: inline;
+}
+#profile_desc{
+    position: absolute;
+    font-family: 'Oswald';
+    font-size: 1.6vw;
+    top: 6vw;
+    left: 2vw;
+    max-width: 19vw;
+    min-width: 16vw;
+}
+#profile_bio{
+    position: absolute;
+    right: 2vw;
+    top: 6vw;
+    max-width: 19vw;
+    min-width: 16vw;
+}
+#drag_picture{
+    width: 100%;
+    height: 75vh;
+    border: 4px groove beige;
+}
+#drag_picture p{
+    margin: 0 auto;
+    display: table;
+    position: relative;
+    top: 33vh;
+}
+.profile_sub_headers{
+    font-family: 'Oswald';
+    font-size: 1.6vw;
+}
+canvas{
+    display: none;
+}
+video{
+    width: 100%;
+    height: 100%;
+}
+hr{
+    margin-top: 0px;
+}
+input{
+    margin-bottom: 2vw;
+}
+input::-webkit-input-placeholder {
+color: #fff !important;
+}
+ 
+input:-moz-placeholder { 
+color: #fff !important;  
+}
+ 
+input::-moz-placeholder {
+color: #fff !important;  
+}
+ 
+input:-ms-input-placeholder {  
+color: #fff !important;  
+}

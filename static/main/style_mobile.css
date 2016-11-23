@@ -1,0 +1,8 @@
+@media (max-width:480px) {
+    #main_title {
+        font-size: 21vw;
+    }
+    .symbol{
+    	font-size: 8vw;
+    }
+}

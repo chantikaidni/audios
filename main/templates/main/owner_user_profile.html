@@ -1,0 +1,311 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="" en>
+
+<head>
+    <meta charset="utf-8">
+    <title>listen</title>
+    <!-- <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'sitewide/bootstrap-social-gh-pages/bootstrap-social.css' %}">
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{% static 'main/style_home_page.css' %}">
+    <link rel="stylesheet" href="{% static 'main/style_mobile.css' %}">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Archivo+Narrow:400,700' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Dawning+of+a+New+Day' rel='stylesheet' type='text/css'>
+    <link href="https://fonts.googleapis.com/css?family=Oswald" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Mirza|Poiret+One" rel="stylesheet">
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/1.0.52/wavesurfer.min.js"></script>
+</head>
+
+<body>
+    <style>
+    .header_hover:hover {
+        color: #ccc !important;
+    }
+    </style>
+    <nav class="navbar navbar-default" style="background-color: currentColor; border:0px;height:3vw;">
+        <div class="container-fluid">
+            <ul class="nav navbar-nav">
+                <li><img src="{% static 'sitewide/logo_white.png' %}" style="width: 37%;
+    position: relative;
+    left: 11vw;"></li>
+                <li>
+                    <input type="text" class="form-control form_element_design" id="search_header" placeholder="Search Audios" style="width: 28vw;
+    position: relative;
+    top: 0.8vw;
+    left: -2vw;">
+                </li>
+                <li>
+                    <a class="header_hover" href="/main/user_profile/">
+                        <img src={{photo_link}} style="    width: 137%;
+    top: 12%;
+    left: 120%;
+    position: absolute;"></a>
+                </li>
+                <li>
+                    <a class="header_hover" href="/main/user_profile/">
+                        <p class="header_hover" style="    left: 3vw;
+    position: relative;">{{ user.first_name }}</p>
+                    </a>
+                </li>
+                <li><a class="header_hover" href="/main/logout_user/" style="position:relative;left:2vw;">Log out
+</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div id="profile_permanent">
+        {%if desc%}
+        <div id='profile_desc'>
+            <p class="profile_sub_headers">Description</p>
+            <hr>
+            <p>
+                {{desc}}
+            </p>
+        </div>
+        {% endif %}
+        <div id="profile_bio">
+            <p class="profile_sub_headers">About</p>
+            <hr>
+            <ul>
+                {%if work%}
+                <li><i class="fa fa-building" aria-hidden="true"></i>&nbsp {{profession_name}} at {{work}}</li>
+                {%endif%}
+                <br>
+                <li><i class="fa fa-university" aria-hidden="true"></i>&nbsp Greater Noida Institute of Technology, Greater Noida</li>
+            </ul>
+        </div>
+        <div><img id="profile_photo" src={{photo_link}}></div>
+        <p id="profile_name">{{full_name }}</p>
+        <ul id="profile_contact_buttons">
+            <li style="margin-right:1vw;">
+                <button type="button" id="show_followers" data-target=".modal_show_followers" data-toggle="modal" class="btn btn-outline-primary">Followers | {{followers_total}}</button>
+            </li>
+            <li>
+                <button type="button" id="show_circle" class="btn btn-outline-primary">Circle | {{circle_total}}</button>
+            </li>
+        </ul>
+        <div id="edit_Ppicture" data-target=".modal_change_Ppicture" data-toggle="modal">Edit Picture</div>
+    </div>
+    <div class="modal fade modal_change_Ppicture" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">Update Profile Picture</h4>
+                </div>
+                <div class="modal-body" id="pic_modal">
+                    <div id="drag_picture">
+                        <p>Drag your Picture here, or...</p>
+                        <!-- <video id="video"></video>
+<button id="startbutton">Take photo</button>
+<canvas id="canvas"></canvas>
+<script id="jsbin-javascript">
+(function() {
+
+  var streaming = false,
+      video        = document.querySelector('#video'),
+      canvas       = document.querySelector('#canvas'),
+      photo        = document.querySelector('#photo'),
+      startbutton  = document.querySelector('#startbutton'),
+      width = 320,
+      height = 0;
+
+  navigator.getMedia = ( navigator.getUserMedia ||
+                         navigator.webkitGetUserMedia ||
+                         navigator.mozGetUserMedia ||
+                         navigator.msGetUserMedia);
+
+  navigator.getMedia(
+    {
+      video: true,
+      audio: false
+    },
+    function(stream) {
+      if (navigator.mozGetUserMedia) {
+        video.mozSrcObject = stream;
+      } else {
+        var vendorURL = window.URL || window.webkitURL;
+        video.src = vendorURL.createObjectURL(stream);
+      }
+      video.play();
+    },
+    function(err) {
+      console.log("An error occured! " + err);
+    }
+  );
+
+  video.addEventListener('canplay', function(ev){
+    if (!streaming) {
+      height = video.videoHeight / (video.videoWidth/width);
+      video.setAttribute('width', width);
+      video.setAttribute('height', height);
+      canvas.setAttribute('width', width);
+      canvas.setAttribute('height', height);
+      streaming = true;
+    }
+  }, false);
+
+  function takepicture() {
+    canvas.width = width;
+    canvas.height = height;
+    canvas.getContext('2d').drawImage(video, 0, 0, width, height);
+    var data = canvas.toDataURL('image/png');
+    photo.setAttribute('src', data);
+  }
+
+  startbutton.addEventListener('click', function(ev){
+      takepicture();
+    ev.preventDefault();
+  }, false);
+
+})();
+</script> -->
+                        <button type="button" class="btn btn-outline-primary">Upload Picture</button>
+                        <button type="button" id="capture_webcam" class="btn btn-outline-primary">Capture Picture</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade modal_show_followers" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">Your Followers | {{followers_total}}</h4>
+                </div>
+                <div class="modal-body" id="follower_modal_body">
+                    {% if followers_total == 0 %}
+                    <p> You don't have any follower now. Keep posting audios to stay connected </p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+    function start_webcam() {
+        (function() {
+            str = '<video id="video"></video><canvas id="canvas"></canvas>';
+            var pic_modal = document.getElementById('pic_modal');
+            pic_modal.insertAdjacentHTML('beforeend', str);
+            var streaming = false,
+                video = document.querySelector('#video'),
+                canvas = document.querySelector('#canvas'),
+                photo = document.querySelector('#photo'),
+                startbutton = document.querySelector('#startbutton'),
+                width = 320,
+                height = 0;
+
+            navigator.getMedia = (navigator.getUserMedia ||
+                navigator.webkitGetUserMedia ||
+                navigator.mozGetUserMedia ||
+                navigator.msGetUserMedia);
+
+            navigator.getMedia({
+                    video: true,
+                    audio: false
+                },
+                function(stream) {
+                    if (navigator.mozGetUserMedia) {
+                        video.mozSrcObject = stream;
+                    } else {
+                        var vendorURL = window.URL || window.webkitURL;
+                        video.src = vendorURL.createObjectURL(stream);
+                    }
+                    video.play();
+                },
+                function(err) {
+                    console.log("An error occured! " + err);
+                }
+            );
+            video.addEventListener('canplay', function(ev) {
+                if (!streaming) {
+                    height = video.videoHeight / (video.videoWidth / width);
+                    video.setAttribute('width', width);
+                    video.setAttribute('height', height);
+                    canvas.setAttribute('width', width);
+                    canvas.setAttribute('height', height);
+                    streaming = true;
+                }
+            }, false);
+            str = '<button id="startbutton">Take photo</button>';
+            pic_modal.insertAdjacentHTML('beforeend', str);
+
+            function takepicture() {
+                canvas.width = width;
+                canvas.height = height;
+                canvas.getContext('2d').drawImage(video, 0, 0, width, height);
+                var data = canvas.toDataURL('image/png');
+                console.log(data);
+                $('#startbutton').css('display', 'none');
+                $('#video').css('display', 'none');
+
+                // photo.setAttribute('src', data);
+                str = '<img src=' + data + ' style = "width:100%;">';
+                pic_modal.insertAdjacentHTML('beforeend', str);
+
+            }
+            document.getElementById('startbutton').addEventListener('click', function(ev) {
+                takepicture();
+                ev.preventDefault();
+            }, false);
+
+        })();
+    }
+    $(document).on('click', '#capture_webcam', function() {
+        $('#drag_picture').css('display', 'none');
+        start_webcam();
+    });
+    $(document).on('click', '#show_followers', function() {
+        var token = '{{ csrf_token }}';
+        var fd = new FormData();
+        fd.append('csrfmiddlewaretoken', token);
+        $.ajax({
+            url: '../../send_followers/',
+            type: 'POST',
+            data: fd,
+            processData: false,
+            contentType: false,
+            success: function(data) {
+                console.log(data);
+                var follower_modal_body = document.getElementById('follower_modal_body');
+                while (follower_modal_body.firstChild) {
+                    follower_modal_body.removeChild(follower_modal_body.firstChild);
+                }
+                for (follower in data) {
+                    var follower_obj = data[follower];
+                    // for (follower_obj_detail in follower_obj){
+                    //   console.log(follower_obj[follower_obj_detail]);
+                    // }
+                    follower_block = "<div class='user_thumbnail' style='display:inline;'><img src=" + follower_obj['photo_link'] + " href = " + follower_obj['profile_link'] + "  style='width:11%;'><p style='display:inline;'>" + follower_obj['full_name'] + "</p></div>";
+                    follower_modal_body.insertAdjacentHTML('beforeend', follower_block);
+                    console.log(follower_obj['profile_link']);
+                    console.log(follower_obj['full_name']);
+                    console.log(follower_obj['photo_link']);
+                }
+            }
+        });
+    })
+    $(function() {
+        $("#profile_photo").hover(function() {
+            //$(this).find(".overlay").fadeIn();
+            $("#edit_Ppicture").fadeIn();
+        }, function() {
+            //$(this).find(".overlay").fadeOut();
+            $("#edit_Ppicture").fadeOut();
+        });
+    });
+    </script>>
+</body>
+
+</html>
